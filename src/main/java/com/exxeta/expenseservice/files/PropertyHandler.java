@@ -27,7 +27,7 @@ public class PropertyHandler {
                 createPropertyFile();
                 writeCurrentMonthToFile();
             }
-            logger.info("The property file exits.");
+            logger.info("The property file exists.");
         } catch (Exception exception) {
             exception.printStackTrace();
         }
