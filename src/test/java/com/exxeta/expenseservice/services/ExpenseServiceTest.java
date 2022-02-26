@@ -179,8 +179,9 @@ public class ExpenseServiceTest {
 
         List<Expense> mockExpenseList = List.of(mockExpense);
 
+        final int year = LocalDate.now().getYear();
         when(expenseRepository.findExpensesByDateIsGreaterThanEqualAndUserId(
-            LocalDate.of(2021, month, 1), userId)).thenReturn(mockExpenseList);
+            LocalDate.of(year, month, 1), userId)).thenReturn(mockExpenseList);
 
         List<ExpenseToFrontend> expected = List.of(new ExpenseToFrontend(date, article, category, 14.5, 23.56));
         List<ExpenseToFrontend> actual = service.getExpensesFromGivenMonth(userId, String.valueOf(month));
