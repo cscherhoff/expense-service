@@ -61,6 +61,10 @@ public class Category {
         this.currentBudget = currentBudget;
     }
 
+    public void setBudget(BigDecimal budget) {
+        this.budget = budget;
+    }
+
     @Override
     public String toString() {
         return name;

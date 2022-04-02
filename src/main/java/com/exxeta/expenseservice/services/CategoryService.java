@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -37,6 +38,18 @@ public class CategoryService {
             categoryDtoList.add(categoryDto);
         }
         return categoryDtoList;
+    }
+
+    public void updateBudgetForCategories(Collection<Category> categories) {
+        for (Category category: categories) {
+            final Category categoryFromDb = categoryRepository.findCategoryByName(category.getName());
+            if (categoryFromDb == null) {
+                categoryRepository.save(category);
+            } else {
+                categoryFromDb.setBudget(category.getBudget());
+                categoryRepository.save(categoryFromDb);
+            }
+        }
     }
 
     private CategoryDto createCategoryDto(Category category) {
