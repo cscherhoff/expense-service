@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.Mockito.*;
@@ -48,8 +49,8 @@ public class ExpenseServiceTest {
             BigDecimal.valueOf(expenseFromFrontend.amount),
             BigDecimal.valueOf(expenseFromFrontend.price));
 
-        when(categoryRepository.findCategoryByName(testCategory)).thenReturn(testCategoryObject);
-        when(articleRepository.findArticleByName(testArticle)).thenReturn(mockArticleFromDb);
+        when(categoryRepository.findCategoryByUserIdAndName(userId, testCategory)).thenReturn(Optional.of(testCategoryObject));
+        when(articleRepository.findArticleByUserIdAndName(userId, testArticle)).thenReturn(Optional.of(mockArticleFromDb));
 
         try {
             service.saveAllNewExpenses(List.of(expenseFromFrontend));
@@ -57,8 +58,8 @@ public class ExpenseServiceTest {
             ioException.printStackTrace();
         }
 
-        verify(categoryRepository,times(1)).findCategoryByName(testCategory);
-        verify(articleRepository,times(1)).findArticleByName(testArticle);
+        verify(categoryRepository,times(1)).findCategoryByUserIdAndName(userId, testCategory);
+        verify(articleRepository,times(1)).findArticleByUserIdAndName(userId, testArticle);
         verify(expenseRepository,times(1)).saveAndFlush(expense);
         verify(categoryRepository, times(1)).save(testCategoryObject);
         verify(categoryRepository,times(1)).findAllByUserId(userId);
@@ -80,8 +81,8 @@ public class ExpenseServiceTest {
             BigDecimal.valueOf(expenseFromFrontend.amount),
             BigDecimal.valueOf(expenseFromFrontend.price));
 
-        when(categoryRepository.findCategoryByName(testCategory)).thenReturn(testCategoryObject);
-        when(articleRepository.findArticleByName(testArticle)).thenReturn(null);
+        when(categoryRepository.findCategoryByUserIdAndName(userId, testCategory)).thenReturn(java.util.Optional.of(testCategoryObject));
+        when(articleRepository.findArticleByUserIdAndName(userId, testArticle)).thenReturn(Optional.empty());
         when(articleRepository.saveAndFlush(mockArticleFromDb)).thenReturn(null);
         when(expenseRepository.saveAndFlush(expense)).thenReturn(null);
         when(categoryRepository.save(testCategoryObject)).thenReturn(null);
@@ -94,8 +95,8 @@ public class ExpenseServiceTest {
             ioException.printStackTrace();
         }
 
-        verify(categoryRepository,times(1)).findCategoryByName(testCategory);
-        verify(articleRepository,times(1)).findArticleByName(testArticle);
+        verify(categoryRepository,times(1)).findCategoryByUserIdAndName(userId, testCategory);
+        verify(articleRepository,times(1)).findArticleByUserIdAndName(userId, testArticle);
         verify(categoryRepository,times(1)).findAllByUserId(userId);
         verify(articleRepository,times(1)).findAllByUserId(userId);
 
@@ -121,8 +122,8 @@ public class ExpenseServiceTest {
             BigDecimal.valueOf(expenseFromFrontend.amount),
             BigDecimal.valueOf(expenseFromFrontend.price));
 
-        when(categoryRepository.findCategoryByName(testCategory)).thenReturn(testCategoryObject);
-        when(articleRepository.findArticleByName(testArticle)).thenReturn(mockArticleFromDb);
+        when(categoryRepository.findCategoryByUserIdAndName(userId, testCategory)).thenReturn(Optional.of(testCategoryObject));
+        when(articleRepository.findArticleByUserIdAndName(userId, testArticle)).thenReturn(Optional.of(mockArticleFromDb));
         when(expenseRepository.saveAndFlush(expense)).thenReturn(null);
         when(articleRepository.saveAndFlush(mockArticleWithNewDefaults)).thenReturn(null);
         when(categoryRepository.save(testCategoryObject)).thenReturn(null);
@@ -135,8 +136,8 @@ public class ExpenseServiceTest {
             ioException.printStackTrace();
         }
 
-        verify(categoryRepository,times(1)).findCategoryByName(testCategory);
-        verify(articleRepository,times(1)).findArticleByName(testArticle);
+        verify(categoryRepository,times(1)).findCategoryByUserIdAndName(userId, testCategory);
+        verify(articleRepository,times(1)).findArticleByUserIdAndName(userId, testArticle);
         verify(articleRepository, times(1)).saveAndFlush(mockArticleWithNewDefaults);
         verify(expenseRepository,times(1)).saveAndFlush(expense);
         verify(categoryRepository, times(1)).save(testCategoryObject);
