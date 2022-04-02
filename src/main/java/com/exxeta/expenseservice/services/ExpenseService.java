@@ -13,7 +13,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExpenseService {
@@ -55,8 +58,13 @@ public class ExpenseService {
 
     private void saveNewExpense(ExpenseFromFrontend expenseFromFrontend) {
         Expense expense;
-        Category categoryFromDb = categoryRepository.findCategoryByName(expenseFromFrontend.category);
-        Article articleFromDb = getArticleFromDatabase(expenseFromFrontend, categoryFromDb);
+        final String categoryName = expenseFromFrontend.category;
+        final long userId = expenseFromFrontend.userId;
+        Optional<Category> categoryFromDb = categoryRepository.findCategoryByUserIdAndName(userId, categoryName);
+        if (categoryFromDb.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not find the category " + categoryName + " in the database for the user id " + userId);
+        }
+        Article articleFromDb = getArticleFromDatabase(expenseFromFrontend, categoryFromDb.get());
         expense = saveExpenseToDatabase(expenseFromFrontend, articleFromDb);
         if (expenseFromFrontend.overrideDefaults) {
             overrideArticleDefaults(expense.getArticle(), expense.getAmount().doubleValue(),
@@ -66,14 +74,17 @@ public class ExpenseService {
     }
 
     private Article getArticleFromDatabase(ExpenseFromFrontend expenseFromFrontend, Category categoryFromDb) {
-        Article articleFromDb = articleRepository.findArticleByName(expenseFromFrontend.article);
-        if (articleFromDb==null) {
+        Optional<Article> articleFromDbOptional = articleRepository.findArticleByUserIdAndName(expenseFromFrontend.userId, expenseFromFrontend.article);
+        Article article;
+        if (articleFromDbOptional.isEmpty()) {
             logger.info("This is a new article - create it");
-            articleFromDb = new Article(expenseFromFrontend.userId, categoryFromDb, expenseFromFrontend.article);
-            articleRepository.saveAndFlush(articleFromDb);
+            article = new Article(expenseFromFrontend.userId, categoryFromDb, expenseFromFrontend.article);
+            articleRepository.saveAndFlush(article);
             logger.info("Successfully saved the new article into the database.");
+        } else {
+            article = articleFromDbOptional.get();
         }
-        return articleFromDb;
+        return article;
     }
 
     private Expense saveExpenseToDatabase(ExpenseFromFrontend expenseFromFrontend, Article articleFromDb) {

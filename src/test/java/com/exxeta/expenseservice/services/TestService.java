@@ -39,7 +39,7 @@ public class TestService {
         List<Category> categoryList = makeCategoryList();
         when(categoryRepository.findAllByUserId(userId)).thenReturn(categoryList);
 
-        List<CategoryDto> categoryDtoList = categoryService.getAllCategories(userId);
+        List<CategoryDto> categoryDtoList = categoryService.getAllCategoryDtos(userId);
 
         List<CategoryDto> expected = createExpectedResult();
         assertIterableEquals(categoryDtoList, expected, "The lists aren't the same!");

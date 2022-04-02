@@ -1,5 +1,7 @@
 package com.exxeta.expenseservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     private long id;
 
     private long userId;
@@ -18,6 +21,7 @@ public class Category {
     @OneToMany(cascade = CascadeType.REMOVE,
             fetch = FetchType.EAGER,
             mappedBy = "category")
+    @JsonIgnore
     private final Collection<Article> articles = new ArrayList<>();
 
     private String name;
