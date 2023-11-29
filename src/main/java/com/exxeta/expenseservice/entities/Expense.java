@@ -12,7 +12,7 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long expenseId;
 
-    private long userId;
+    private String userId;
 
     @Column
     private LocalDate date;
@@ -27,7 +27,7 @@ public class Expense {
     @Column
     private BigDecimal price;
 
-    public Expense(long userId, LocalDate date, Article article, BigDecimal amount, BigDecimal price) {
+    public Expense(String userId, LocalDate date, Article article, BigDecimal amount, BigDecimal price) {
         this.userId = userId;
         this.date = date;
         this.article = article;
@@ -38,7 +38,7 @@ public class Expense {
     public Expense() {
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 

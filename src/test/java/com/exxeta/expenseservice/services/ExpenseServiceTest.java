@@ -33,7 +33,7 @@ public class ExpenseServiceTest {
     private final ExpenseService service = new ExpenseService(expenseExporter, expenseRepository, categoryRepository,
             articleRepository);
 
-    private final long userId = 6;
+    private final String userId = "6";
 
     @Test
     public void testSaveNewExpenseWithoutOverrideDefaults() {

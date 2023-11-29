@@ -10,7 +10,7 @@ import java.util.Objects;
 public class ExpenseFromFrontend {
 
     @JsonIgnore
-    public long userId;
+    public String userId;
     @JsonSerialize(using = LocalDateSerializer.class)
 //    @JsonDeserialize(using = LocalDateDeserializer.class)
     public LocalDate date;
@@ -20,7 +20,7 @@ public class ExpenseFromFrontend {
     public double price;
     public boolean overrideDefaults;
 
-    public ExpenseFromFrontend(long userId, LocalDate date, String article, String category, double amount, double price,
+    public ExpenseFromFrontend(String userId, LocalDate date, String article, String category, double amount, double price,
         boolean overrideDefaults) {
         this.userId = userId;
         this.date = date;
@@ -31,7 +31,7 @@ public class ExpenseFromFrontend {
         this.overrideDefaults = overrideDefaults;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

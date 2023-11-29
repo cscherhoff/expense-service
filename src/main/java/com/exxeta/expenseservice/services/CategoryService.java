@@ -31,9 +31,9 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public List<Category> getAllCategories(long userId) {return categoryRepository.findAllByUserId(userId);}
+    public List<Category> getAllCategories(String userId) {return categoryRepository.findAllByUserId(userId);}
 
-    public List<CategoryDto> getAllCategoryDtos(long userId) {
+    public List<CategoryDto> getAllCategoryDtos(String userId) {
         List<CategoryDto> categoryDtoList = new ArrayList<>();
         for (Category category: categoryRepository.findAllByUserId(userId)) {
             CategoryDto categoryDto = createCategoryDto(category);

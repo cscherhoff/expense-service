@@ -37,12 +37,12 @@ public class ExpenseExporter {
         logger.info("The exportPath for the expenses is: " + this.exportPath);
     }
 
-    public void exportExpenses(long userId, List<ExpenseFromFrontend> expenseList, boolean exportAllExpense) throws IOException {
+    public void exportExpenses(String userId, List<ExpenseFromFrontend> expenseList, boolean exportAllExpense) throws IOException {
         final String pathToExportFile = getExpenseExportFilePath(userId, exportAllExpense);
         export(convertListOfExpenses(expenseList), pathToExportFile, true);
     }
 
-    private String getExpenseExportFilePath(long userId, boolean exportAllExpense) throws IOException {
+    private String getExpenseExportFilePath(String userId, boolean exportAllExpense) throws IOException {
         createExportFolders(userId);
         String expenseFileName;
         if (exportAllExpense) {
@@ -54,17 +54,17 @@ public class ExpenseExporter {
         return exportPath + pathSeparator + userId + pathSeparator + expenseFileName;
     }
 
-    public void exportCategories(long userId, List<Category> categoryList) throws IOException {
+    public void exportCategories(String userId, List<Category> categoryList) throws IOException {
         String pathToExportFile = getArticleCategoryExportFilePath(userId, "categories");
         export(convertListOfCategories(categoryList), pathToExportFile, false);
     }
 
-    public void exportArticles(long userId, List<Article> articleList) throws IOException {
+    public void exportArticles(String userId, List<Article> articleList) throws IOException {
         String pathToExportFile = getArticleCategoryExportFilePath(userId, "articles");
         export(convertListOfArticles(articleList), pathToExportFile, false);
     }
 
-    private String getArticleCategoryExportFilePath(long userId, String name) {
+    private String getArticleCategoryExportFilePath(String userId, String name) {
         String dateToday = getDateToday();
         final String pathToArticleCategoryExport =
                 exportPath + pathSeparator + userId + pathSeparator + "categories_and_articles";
@@ -72,7 +72,7 @@ public class ExpenseExporter {
         return pathToArticleCategoryExport + pathSeparator + exportFileName;
     }
 
-    private void createExportFolders(long userId) throws IOException {
+    private void createExportFolders(String userId) throws IOException {
         if (!folderExists(exportPath)) {
             createFolder(exportPath);
         }

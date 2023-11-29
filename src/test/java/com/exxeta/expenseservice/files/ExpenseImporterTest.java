@@ -26,9 +26,9 @@ public class ExpenseImporterTest {
 
     @Test
     public void testImportCategories() {
-        Category importedCategory = new Category(1, "Haushalt", BigDecimal.valueOf(56.0), BigDecimal.valueOf(57.98));
+        Category importedCategory = new Category("1", "Haushalt", BigDecimal.valueOf(56.0), BigDecimal.valueOf(57.98));
 
-        expenseImporter.importCategories(path + "" + separator + "categories_and_articles" + separator + "categories_2021-08-17.csv");
+        expenseImporter.importCategories(path + separator + "categories_and_articles" + separator + "categories_2021-08-17.csv");
 
         verify(categoryRepository, times(1)).saveAll(List.of(importedCategory));
         verifyNoMoreInteractions(categoryRepository);
@@ -37,8 +37,8 @@ public class ExpenseImporterTest {
 
     @Test
     public void testImportArticles() {
-        Category testCategory = new Category(1, "Haushalt");
-        Article importedArticle = new Article(1, testCategory, "Tisch", 12.98, 4.7);
+        Category testCategory = new Category("1", "Haushalt");
+        Article importedArticle = new Article("1", testCategory, "Tisch", 12.98, 4.7);
 
         when(categoryRepository.findCategoryByName("Haushalt")).thenReturn(testCategory);
 
@@ -53,9 +53,9 @@ public class ExpenseImporterTest {
 
     @Test
     public void testImportExpenses() {
-        Category category = new Category(1, "testCategory1");
-        Article article = new Article(1, category, "testArticle1");
-        Expense expense = new Expense(1, LocalDate.of(2021, 4, 15), article,
+        Category category = new Category("1", "testCategory1");
+        Article article = new Article("1", category, "testArticle1");
+        Expense expense = new Expense("1", LocalDate.of(2021, 4, 15), article,
                 BigDecimal.valueOf(122.00), BigDecimal.valueOf(248.46));
 
         when(articleRepository.findArticleByName("testArticle1")).thenReturn(article);

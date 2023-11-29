@@ -19,7 +19,7 @@ public class ExpenseExporterTest {
     private final String path = "src" + separator + "test" + separator + "resources" + separator + "testFiles" + separator;
 
     private final ExpenseExporter expenseExporter = new ExpenseExporter(path);
-    private static final long userId = 5;
+    private static final String userId = "5";
     private static List<ExpenseFromFrontend> testExpenseList = new ArrayList<>();
     private static List<Category> testCategoryList = new ArrayList<>();
     private static List<Article> testArticleList = new ArrayList<>();

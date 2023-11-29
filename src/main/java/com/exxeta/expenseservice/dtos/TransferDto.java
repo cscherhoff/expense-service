@@ -5,11 +5,11 @@ import java.util.Objects;
 
 public class TransferDto {
 
-    private final long userId;
+    private final String userId;
     private final String accountName;
     private final BigDecimal amount;
 
-    public TransferDto(long userId, String accountName, BigDecimal amount) {
+    public TransferDto(String userId, String accountName, BigDecimal amount) {
         this.userId = userId;
         this.accountName = accountName;
         this.amount = amount;
@@ -29,7 +29,7 @@ public class TransferDto {
             Objects.equals(amount, that.amount);
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 

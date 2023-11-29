@@ -10,7 +10,7 @@ import java.util.Objects;
 public class ExpenseToFrontend {
 
     @JsonIgnore
-    public long userId;
+    public String userId;
     @JsonSerialize(using = LocalDateSerializer.class)
 //    @JsonDeserialize(using = LocalDateDeserializer.class)
     public LocalDate date;

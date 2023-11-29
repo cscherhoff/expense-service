@@ -49,7 +49,7 @@ public class ExpenseService {
             saveNewExpense(expenseFromFrontend);
         }
         if (!expenseFromFrontendList.isEmpty()) {
-            long userId = expenseFromFrontendList.get(0).userId;
+            String userId = expenseFromFrontendList.get(0).userId;
             expenseExporter.exportExpenses(userId, expenseFromFrontendList, false);
             expenseExporter.exportCategories(userId, categoryRepository.findAllByUserId(userId));
             expenseExporter.exportArticles(userId, articleRepository.findAllByUserId(userId));
@@ -59,7 +59,7 @@ public class ExpenseService {
     private void saveNewExpense(ExpenseFromFrontend expenseFromFrontend) {
         Expense expense;
         final String categoryName = expenseFromFrontend.category;
-        final long userId = expenseFromFrontend.userId;
+        final String userId = expenseFromFrontend.userId;
         Optional<Category> categoryFromDb = categoryRepository.findCategoryByUserIdAndName(userId, categoryName);
         if (categoryFromDb.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not find the category " + categoryName + " in the database for the user id " + userId);
@@ -125,7 +125,7 @@ public class ExpenseService {
         category.setCurrentBudget(newBudget);
     }
 
-    public List<ExpenseToFrontend> getAllExpenses(long userId) {
+    public List<ExpenseToFrontend> getAllExpenses(String userId) {
         return convertExpenseListToFrontend(expenseRepository.findAllByUserId(userId));
     }
 
@@ -138,7 +138,7 @@ public class ExpenseService {
             expense.getPrice().doubleValue());
     }
 
-    public List<ExpenseToFrontend> getExpensesFromGivenMonth(long userId, String month) {
+    public List<ExpenseToFrontend> getExpensesFromGivenMonth(String userId, String month) {
         return convertExpenseListToFrontend(expenseRepository.findExpensesByDateIsGreaterThanEqualAndUserId(LocalDate.of(LocalDate.now().getYear(),
             Month.of(Integer.parseInt(month)), 1), userId));
     }

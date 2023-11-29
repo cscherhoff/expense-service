@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
-    List<Expense> findExpensesByDateIsGreaterThanEqualAndUserId(LocalDate date, long userId);
-    List<Expense> findAllByUserId(long userId);
+    List<Expense> findExpensesByDateIsGreaterThanEqualAndUserId(LocalDate date, String userId);
+    List<Expense> findAllByUserId(String userId);
 //    List<Expense> findExpensesByUserId(long userId);
 }

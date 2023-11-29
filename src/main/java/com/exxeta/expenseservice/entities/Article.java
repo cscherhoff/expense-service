@@ -15,7 +15,7 @@ public class Article implements Comparable<Article> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long ID;
 
-    private long userId;
+    private String userId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category")
@@ -40,13 +40,13 @@ public class Article implements Comparable<Article> {
     public Article() {
     }
 
-    public Article(long userId, Category category, String name) {
+    public Article(String userId, Category category, String name) {
         this.userId = userId;
         this.category = category;
         this.name = name;
     }
 
-    public Article(long userId, Category category, String name, double defaultAmount, double defaultPrice) {
+    public Article(String userId, Category category, String name, double defaultAmount, double defaultPrice) {
         this.userId = userId;
         this.category = category;
         this.name = name;

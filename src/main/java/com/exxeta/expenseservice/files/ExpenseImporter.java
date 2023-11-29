@@ -51,7 +51,7 @@ public class ExpenseImporter {
 
     private Expense convertToExpense(String stringExpense) {
         String[] stringArray = stringExpense.split(";");
-        long userId = 1;
+        String userId = "1";
         LocalDate date = LocalDate.parse(stringArray[0], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Article article = articleRepository.findArticleByName(stringArray[2]);
         double amount = Double.parseDouble(stringArray[3]);
@@ -79,7 +79,7 @@ public class ExpenseImporter {
 
     private Category convertToCategory(String stringExpense) {
         String[] stringArray = stringExpense.split(";");
-        long userId = 1;
+        String userId = "1";
         String name = stringArray[0];
         double budget = Double.parseDouble(stringArray[1]);
         double currentBudget = Double.parseDouble(stringArray[2]);
@@ -106,7 +106,7 @@ public class ExpenseImporter {
 
     private Article convertToArticle(String stringArticle) {
         String[] stringArray = stringArticle.split(";");
-        long userId = 1;
+        String userId = "1";
         String articleName = stringArray[0];
         Category category = categoryRepository.findCategoryByName(stringArray[1]);
         double defaultAmount = Double.parseDouble(stringArray[2]);

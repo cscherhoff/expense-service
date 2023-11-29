@@ -23,7 +23,7 @@ public class TestBudgetService {
     @Test
     public void testUpdateCategoriesForNewMonth() {
         String mockCurrentMonth = "6";
-        long userId = 5;
+        String userId = "5";
         Category testCategory1 = new Category(userId, "TestCategory1");
         Category testCategory2 = new Category(userId, "TestCategory2");
 

@@ -16,7 +16,7 @@ public class Category {
     @JsonIgnore
     private long id;
 
-    private long userId;
+    private String userId;
 
     @OneToMany(cascade = CascadeType.REMOVE,
             fetch = FetchType.EAGER,
@@ -33,12 +33,12 @@ public class Category {
     public Category() {
     }
 
-    public Category(long userId, String name) {
+    public Category(String userId, String name) {
         this.userId = userId;
         this.name = name;
     }
 
-    public Category(long userId, String name, BigDecimal budget, BigDecimal currentBudget) {
+    public Category(String userId, String name, BigDecimal budget, BigDecimal currentBudget) {
         this.userId = userId;
         this.name = name;
         this.budget = budget;

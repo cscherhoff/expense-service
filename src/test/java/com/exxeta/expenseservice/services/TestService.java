@@ -31,7 +31,7 @@ public class TestService {
 
     private final CategoryService categoryService = new CategoryService(categoryRepository);
 
-    private final long userId = 5;
+    private final String userId = "5";
 
 
     @Test
