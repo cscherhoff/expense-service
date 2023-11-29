@@ -26,11 +26,21 @@ public class BudgetService {
     @PostConstruct
     public void starterMethod() {
         int realMonth = dateService.getRealCurrentMonth();
-        String currentMonth = propertyHandler.getCurrentMonth();
-        logger.info("The current month from the property file is: " + currentMonth);
-        if (isNewMonth(Integer.parseInt(currentMonth), realMonth)) {
+        int currentMonth = 0;
+        try {
+            currentMonth = Integer.parseInt(propertyHandler.getCurrentMonth());
+        } catch (Exception ignore) {
+            logger.error("The property file contains an invalid value!");
+        }
+        if (currentMonth == 0) {
             updateAllCategories();
-            updateMonthProperties();
+            updateMonthProperties(realMonth);
+        } else {
+            logger.info("The current month from the property file is: " + currentMonth);
+            if (isNewMonth(currentMonth, realMonth)) {
+                updateAllCategories();
+                updateMonthProperties(currentMonth);
+            }
         }
     }
 
@@ -71,8 +81,7 @@ public class BudgetService {
      * every new month.
      * @throws IllegalStateException throws an exception, if the value of old month is not an integer between 1 and 12
      */
-    private void updateMonthProperties() throws IllegalStateException {
-        int oldMonth = Integer.parseInt(propertyHandler.getCurrentMonth());
+    private void updateMonthProperties(int oldMonth) throws IllegalStateException {
         String newMonth;
         if (oldMonth >= 1 && oldMonth < 12) {
             newMonth = String.valueOf(oldMonth + 1);
