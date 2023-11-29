@@ -15,19 +15,20 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 public class ExpenseImporterTest {
+    private static final String separator = System.getProperty("file.separator");
 
     private final ArticleRepository articleRepository = mock(ArticleRepository.class);
     private final ExpenseRepository expenseRepository = mock(ExpenseRepository.class);
     private final CategoryRepository categoryRepository = mock(CategoryRepository.class);
     private final ExpenseImporter expenseImporter = new ExpenseImporter(articleRepository, expenseRepository, categoryRepository);
 
-    private final String path = "src\\test\\resources\\testFiles\\4\\";
+    private final String path = "src" + separator + "test" + separator + "resources" + separator + "testFiles" + separator + "4" + separator;
 
     @Test
     public void testImportCategories() {
         Category importedCategory = new Category(1, "Haushalt", BigDecimal.valueOf(56.0), BigDecimal.valueOf(57.98));
 
-        expenseImporter.importCategories(path + "\\categories_and_articles\\categories_2021-08-17.csv");
+        expenseImporter.importCategories(path + "" + separator + "categories_and_articles" + separator + "categories_2021-08-17.csv");
 
         verify(categoryRepository, times(1)).saveAll(List.of(importedCategory));
         verifyNoMoreInteractions(categoryRepository);
@@ -41,7 +42,7 @@ public class ExpenseImporterTest {
 
         when(categoryRepository.findCategoryByName("Haushalt")).thenReturn(testCategory);
 
-        expenseImporter.importArticles(path + "\\categories_and_articles\\articles_2021-08-17.csv");
+        expenseImporter.importArticles(path + separator + "categories_and_articles" + separator + "articles_2021-08-17.csv");
 
         verify(categoryRepository, times(1)).findCategoryByName("Haushalt");
         verify(articleRepository, times(1)).saveAll(List.of(importedArticle));

@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 public class PropertyHandlerTest {
-    private final String propertyFilePath = "src\\test\\resources\\testFiles\\expense.properties";
+    private static final String separator = System.getProperty("file.separator");
+    private final String propertyFilePath = "src" + separator + "test" + separator + "resources" + separator + "testFiles" + separator + "expense.properties";
 
     @Test
     @Disabled

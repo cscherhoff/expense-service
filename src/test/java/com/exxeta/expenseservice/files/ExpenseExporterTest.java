@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExpenseExporterTest {
+    private static final String separator = System.getProperty("file.separator");
 
-    private final String path = "src\\test\\resources\\testFiles\\";
+    private final String path = "src" + separator + "test" + separator + "resources" + separator + "testFiles" + separator;
 
     private final ExpenseExporter expenseExporter = new ExpenseExporter(path);
     private static final long userId = 5;

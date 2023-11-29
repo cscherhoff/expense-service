@@ -33,7 +33,7 @@ public class TestBudgetService {
 
         budgetService.starterMethod();
 
-        verify(propertyHandler, times(2)).getCurrentMonth();
+        verify(propertyHandler, times(1)).getCurrentMonth();
         verify(propertyHandler, times(1)).changeSaveProperties("7");
         verify(dateService, times(1)).getRealCurrentMonth();
         verify(categoryService, times(1)).getAllCategories();
