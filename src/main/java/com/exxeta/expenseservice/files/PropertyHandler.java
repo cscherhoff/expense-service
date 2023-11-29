@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Properties;
 
@@ -16,18 +17,30 @@ public class PropertyHandler {
     private final String expensePropertyFile;
     private final String currentMonth;
 
-    public PropertyHandler() {
+    public PropertyHandler() throws IOException {
         this(System.getProperty("user.dir") + separator + "properties" + separator + "expense.properties");
     }
 
-    public PropertyHandler(String expensePropertyFile) {
+    public PropertyHandler(String expensePropertyFile) throws IOException {
         this.expensePropertyFile = expensePropertyFile;
+        Path propertyFilePath = Path.of(expensePropertyFile);
+        Path parentFolderPath = propertyFilePath.getParent();
+
+        boolean parentFolderExists = parentFolderPath.toFile().exists();
+        if (!parentFolderExists) {
+            boolean successfullyCreatedParentFolder = parentFolderPath.toFile().mkdir();
+            if (!successfullyCreatedParentFolder) {
+                throw new IOException("Could not create parent folder for property file");
+            }
+            logger.info("The parent folder for the property file was successfully created.");
+            createPropertyFile();
+        }
         try {
             if (!propertyFileExists()) {
                 createPropertyFile();
                 writeCurrentMonthToFile();
             }
-            logger.info("The property file exists.");
+            logger.info("The property file should now exists.");
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -48,6 +61,7 @@ public class PropertyHandler {
         try {
             logger.info("The property file doesn't exist yet and is going to be created now.");
             File propertyFile = new File(expensePropertyFile);
+
             boolean successfullyCreated = propertyFile.createNewFile();
             if (!successfullyCreated) {
                 throw new IOException("Property-File could not be created.");
