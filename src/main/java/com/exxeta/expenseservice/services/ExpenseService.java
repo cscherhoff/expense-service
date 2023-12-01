@@ -13,9 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -60,11 +58,8 @@ public class ExpenseService {
         Expense expense;
         final String categoryName = expenseFromFrontend.category;
         final String userId = expenseFromFrontend.userId;
-        Optional<Category> categoryFromDb = categoryRepository.findCategoryByUserIdAndName(userId, categoryName);
-        if (categoryFromDb.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not find the category " + categoryName + " in the database for the user id " + userId);
-        }
-        Article articleFromDb = getArticleFromDatabase(expenseFromFrontend, categoryFromDb.get());
+        Category categoryFromDb = getCategoryFromDatabase(userId, categoryName);
+        Article articleFromDb = getArticleFromDatabase(expenseFromFrontend, categoryFromDb);
         expense = saveExpenseToDatabase(expenseFromFrontend, articleFromDb);
         if (expenseFromFrontend.overrideDefaults) {
             overrideArticleDefaults(expense.getArticle(), expense.getAmount().doubleValue(),
@@ -73,14 +68,26 @@ public class ExpenseService {
         updateBudgets(expense.getArticle().getCategory(), expense.getPrice());
     }
 
+    private Category getCategoryFromDatabase(String userId, String categoryName) {
+        Optional<Category> categoryFromDb = categoryRepository.findCategoryByUserIdAndName(userId, categoryName);
+        if (categoryFromDb.isEmpty()) {
+            logger.info("This is a new category:");
+            Category newCategory = new Category(userId, categoryName, BigDecimal.ZERO, BigDecimal.ZERO);
+            categoryRepository.saveAndFlush(newCategory);
+            logger.info("Successfully saved the new category '" + categoryName + "' into the database.");
+            return newCategory;
+        }
+        return categoryFromDb.get();
+    }
+
     private Article getArticleFromDatabase(ExpenseFromFrontend expenseFromFrontend, Category categoryFromDb) {
         Optional<Article> articleFromDbOptional = articleRepository.findArticleByUserIdAndName(expenseFromFrontend.userId, expenseFromFrontend.article);
         Article article;
         if (articleFromDbOptional.isEmpty()) {
-            logger.info("This is a new article - create it");
+            logger.info("This is a new article:");
             article = new Article(expenseFromFrontend.userId, categoryFromDb, expenseFromFrontend.article);
             articleRepository.saveAndFlush(article);
-            logger.info("Successfully saved the new article into the database.");
+            logger.info("Successfully saved the new article '" + article.getName() + "' into the database.");
         } else {
             article = articleFromDbOptional.get();
         }
